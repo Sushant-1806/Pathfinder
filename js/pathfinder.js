@@ -30,6 +30,7 @@ let animIdx = 0;
 let animPhase = 'idle'; // 'idle' | 'visiting' | 'path' | 'done'
 let frameId = null;
 let startTime = 0;
+let lastAnimTick = 0;
 
 // Step mode
 let stepVisited = [], stepPath = [], stepIdx = 0, stepPhase = 'visited';
@@ -652,7 +653,13 @@ function render() {
 // ── Animation Loop ───────────────────────────────────────────
 function getBatchSize() {
   const v = parseInt(speedSlider.value);
-  return Math.max(1, Math.round(Math.pow(v, 2.2) * 0.45));
+  return Math.max(1, Math.round(Math.pow(v, 2.15) * 0.4));
+}
+
+function getStepIntervalMs() {
+  const v = parseInt(speedSlider.value) || 1;
+  // Lower slider values wait longer between processing ticks.
+  return Math.max(12, 100 - (v - 1) * 9);
 }
 
 function animationLoop() {
@@ -665,6 +672,16 @@ function animationLoop() {
   }
 
   const now = performance.now();
+  const interval = getStepIntervalMs();
+
+  if (now - lastAnimTick < interval) {
+    timeMsEl.textContent = (now - startTime).toFixed(0);
+    render();
+    frameId = requestAnimationFrame(animationLoop);
+    return;
+  }
+
+  lastAnimTick = now;
   const batch = getBatchSize();
 
   if (animPhase === 'visiting') {
@@ -789,6 +806,7 @@ startBtn.addEventListener('click', () => {
   resetAlgoState();
 
   startTime = performance.now();
+  lastAnimTick = startTime;
   const algoMap = { dijkstra: runDijkstra, bfs: runBFS, dfs: runDFS, astar: runAStar };
   const { visited, path } = algoMap[algoSel.value]();
 
