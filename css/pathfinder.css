@@ -1,0 +1,65 @@
+/* =========================================================
+   Pathfinder — Canvas Graph Visualization Styles
+   ========================================================= */
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ---- Canvas Container ---- */
+#canvasContainer {
+  flex: 1 1 0%;
+  min-height: 200px;
+  overflow: hidden;
+  position: relative;
+  background: hsl(222, 28%, 5%);
+  background-image:
+    radial-gradient(ellipse 80% 70% at 50% 40%, hsla(210, 60%, 8%, 0) 0%, hsl(222, 28%, 5%) 100%);
+}
+
+#graphCanvas {
+  display: block;
+  cursor: default;
+}
+
+/* ---- Stat separator ---- */
+.stat-badge.sep {
+  margin-left: .5rem;
+  padding-left: .75rem;
+  border-left: 1px solid var(--border);
+}
+
+/* ---- Mode Indicator ---- */
+.mode-indicator {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: .35rem .8rem;
+  font-size: .78rem;
+  color: var(--muted);
+  z-index: 50;
+  pointer-events: none;
+  transition: opacity .3s, transform .3s;
+}
+
+/* ---- Legend dot — round to match canvas nodes ---- */
+.legend .legend-dot {
+  border-radius: 50% !important;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .controls {
+    gap: .45rem;
+    padding: .5rem .75rem;
+  }
+  .ctrl-divider { display: none; }
+  .complexity-bar { gap: .5rem; }
+  .stat-badge.sep { margin-left: .25rem; padding-left: .5rem; }
+}

@@ -1,0 +1,151 @@
+/* =========================================================
+   N-Queens Visualizer — CSS
+   ========================================================= */
+
+body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+.nq-main {
+  flex: 1; display: flex; gap: 0; overflow: hidden;
+  min-height: 0;
+}
+
+/* ---- Board area ---- */
+.board-wrapper {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  background: var(--bg);
+  overflow: auto;
+}
+#board {
+  display: grid;
+  border: 2px solid hsla(280,100%,65%,.3);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 60px hsla(280,100%,50%,.12), 0 0 0 1px hsla(280,100%,65%,.1);
+  user-select: none;
+}
+.sq {
+  width: 62px; height: 62px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  transition: background .25s;
+  font-size: 2rem;
+}
+.sq.light { background: hsl(260,20%,18%); }
+.sq.dark  { background: hsl(260,20%,12%); }
+
+/* Attack highlights */
+.sq.attack {
+  background: hsla(355,90%,50%,.18) !important;
+  transition: background .15s;
+}
+.sq.attack-line::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: hsla(355,90%,60%,.08);
+  border: 1px solid hsla(355,90%,60%,.2);
+  pointer-events: none;
+}
+
+/* Safe highlight */
+.sq.safe-target {
+  background: hsla(145,80%,40%,.2) !important;
+}
+
+/* Queen */
+.queen-piece {
+  font-size: 2rem;
+  line-height: 1;
+  animation: queenPlace .35s cubic-bezier(.34,1.56,.64,1);
+  filter: drop-shadow(0 0 8px hsla(280,100%,65%,.7));
+  z-index: 2; position: relative;
+  transition: filter .3s;
+}
+@keyframes queenPlace {
+  0%  { transform: scale(0) rotate(-30deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(5deg); }
+  100%{ transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.queen-piece.conflict {
+  filter: drop-shadow(0 0 10px hsla(355,90%,60%,.9)) !important;
+  animation: shake .4s ease;
+}
+@keyframes shake {
+  0%,100%{transform:rotate(0)} 20%{transform:rotate(-12deg)} 60%{transform:rotate(10deg)} 80%{transform:rotate(-6deg)}
+}
+.queen-piece.solved {
+  filter: drop-shadow(0 0 12px hsla(45,100%,60%,.9));
+}
+
+/* Row labels */
+#board { position: relative; }
+.row-num, .col-num {
+  font-family: var(--mono); font-size: .6rem; color: hsla(280,80%,70%,.5);
+  position: absolute;
+}
+
+/* ---- Side panel ---- */
+.side-panel {
+  width: 260px; min-width: 240px;
+  border-left: 1px solid var(--border);
+  background: var(--bg2);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  padding: 1rem;
+  gap: .5rem;
+}
+.panel-title {
+  font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted);
+}
+.panel-sep { border: none; border-top: 1px solid var(--border); margin: .5rem 0; }
+
+/* Solution gallery */
+.solution-gallery {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column; gap: .5rem;
+  min-height: 0;
+}
+.empty-gallery {
+  color: var(--muted); font-size: .82rem; text-align: center;
+  padding: 2rem 1rem; line-height: 1.7;
+}
+.solution-thumb {
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg3);
+  padding: .4rem;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  display: flex; align-items: center; gap: .6rem;
+}
+.solution-thumb:hover { border-color: hsl(280,100%,65%); background: var(--purple-dim); }
+.solution-thumb.active { border-color: hsl(280,100%,65%); background: var(--purple-dim); }
+.thumb-mini {
+  display: grid;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.thumb-cell { background: hsl(260,20%,14%); }
+.thumb-cell.th-dark { background: hsl(260,20%,10%); }
+.thumb-cell.th-queen { background: hsl(280,100%,65%); }
+.thumb-label { font-size: .75rem; font-family: var(--mono); color: var(--muted); }
+.thumb-sublabel { font-size: .65rem; color: hsla(280,80%,70%,.6); margin-top: .1rem; }
+
+/* Call stack */
+.call-stack {
+  height: 130px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: .25rem;
+}
+.cs-empty { color: var(--muted); font-size: .8rem; text-align: center; padding: .8rem; }
+.cs-frame {
+  font-family: var(--mono); font-size: .7rem;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 4px; padding: .25rem .5rem;
+  color: var(--muted); transition: border-color .2s, color .2s;
+  animation: slideUp .2s ease;
+}
+.cs-frame.active { border-color: hsl(280,100%,65%); color: hsl(280,100%,80%); }
+.cs-frame.ok { border-color: var(--green); color: var(--green); }
+.cs-frame.fail { border-color: var(--red); color: var(--red); }

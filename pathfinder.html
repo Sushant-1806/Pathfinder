@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pathfinding Visualizer — DAA Suite</title>
+  <meta name="description" content="Interactive graph-based pathfinding visualization with Dijkstra, BFS, A* and DFS algorithms. Canvas-rendered node graph with real-time animation."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/pathfinder.css"/>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-brand"><span class="dot"></span> DAA Visualizer Suite</div>
+  <div class="nav-links">
+    <a href="pathfinder.html" class="active">Pathfinding</a>
+    <a href="nqueens.html">N-Queens</a>
+    <a href="index.html" class="nav-home-btn">🏠 Home</a>
+  </div>
+</nav>
+
+<!-- Controls -->
+<div class="controls" id="controls">
+  <div class="ctrl-group">
+    <span class="ctrl-label">Algorithm</span>
+    <select class="select-styled" id="algoSelect">
+      <option value="dijkstra">Dijkstra's</option>
+      <option value="bfs">BFS</option>
+      <option value="astar">A* Search</option>
+      <option value="dfs">DFS</option>
+    </select>
+  </div>
+  <div class="ctrl-divider"></div>
+  <div class="ctrl-group">
+    <span class="ctrl-label">Graph</span>
+    <select class="select-styled" id="graphSelect">
+      <option value="random">Random Scatter</option>
+      <option value="grid">Grid Layout</option>
+      <option value="clusters">Clusters</option>
+      <option value="circular">Concentric</option>
+      <option value="mesh">Dense Mesh</option>
+    </select>
+  </div>
+  <div class="ctrl-group">
+    <span class="ctrl-label">Nodes</span>
+    <select class="select-styled" id="nodeSelect">
+      <option value="100">100</option>
+      <option value="200">200</option>
+      <option value="350" selected>350</option>
+      <option value="500">500</option>
+      <option value="750">750</option>
+    </select>
+  </div>
+  <button class="btn btn-secondary" id="genGraphBtn">⟳ Generate</button>
+  <div class="ctrl-divider"></div>
+  <div class="ctrl-group">
+    <span class="ctrl-label">Speed</span>
+    <span class="ctrl-label" style="font-size:.7rem">Slow</span>
+    <input type="range" class="speed-slider" id="speedSlider" min="1" max="10" value="7"/>
+    <span class="ctrl-label" style="font-size:.7rem">Fast</span>
+  </div>
+  <div class="ctrl-divider"></div>
+  <div class="ctrl-group">
+    <button class="btn btn-primary" id="startBtn">▶ Visualize</button>
+    <button class="btn btn-stop" id="stopBtn" disabled>⏸ Stop</button>
+    <button class="btn btn-secondary" id="stepBtn">⏭ Step</button>
+    <button class="btn btn-danger" id="clearPathBtn">Clear Path</button>
+    <button class="btn btn-danger" id="clearAllBtn">New Graph</button>
+  </div>
+</div>
+
+<!-- Complexity Row -->
+<div class="complexity-bar" id="complexityBar">
+  <div class="complexity-item">
+    <span class="ctrl-label">Algorithm:</span>
+    <span class="value val-cyan" id="algoName">Dijkstra's</span>
+  </div>
+  <div class="complexity-item">
+    <span class="label">Time:</span>
+    <span class="value val-cyan" id="timeComp">O((V+E) log V)</span>
+  </div>
+  <div class="complexity-item">
+    <span class="label">Space:</span>
+    <span class="value val-purple" id="spaceComp">O(V)</span>
+  </div>
+  <div class="complexity-item">
+    <span class="label">Shortest Path:</span>
+    <span class="value val-green" id="shortestTag">Yes (weighted)</span>
+  </div>
+  <div style="flex:1"></div>
+  <div class="stat-badge"><span class="num" id="nodeCount">0</span><span class="unit">nodes</span></div>
+  <div class="stat-badge"><span class="num" id="edgeCount">0</span><span class="unit">edges</span></div>
+  <div class="stat-badge sep"><span class="num" id="visitedCount">0</span><span class="unit">visited</span></div>
+  <div class="stat-badge"><span class="num" id="pathCount">0</span><span class="unit">path</span></div>
+  <div class="stat-badge"><span class="num" id="timeMs">0</span><span class="unit">ms</span></div>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:hsl(190,100%,55%)"></div>Start</div>
+  <div class="legend-item"><div class="legend-dot" style="background:hsl(280,100%,65%)"></div>End</div>
+  <div class="legend-item"><div class="legend-dot" style="background:hsl(210,70%,50%)"></div>Visited</div>
+  <div class="legend-item"><div class="legend-dot" style="background:hsl(190,100%,75%)"></div>Frontier</div>
+  <div class="legend-item"><div class="legend-dot" style="background:hsl(45,100%,60%)"></div>Shortest Path</div>
+  <div class="legend-item" style="margin-left:auto; color:hsl(220,12%,50%); font-size:.75rem">
+    🖱️ Click node → set start then end &nbsp;|&nbsp; Shift+click → move start
+  </div>
+</div>
+
+<!-- Canvas Graph -->
+<div id="canvasContainer">
+  <canvas id="graphCanvas"></canvas>
+</div>
+
+<!-- Mode indicator -->
+<div class="mode-indicator" id="modeIndicator">🎯 Click a node to set start</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="js/pathfinder.js?v=3"></script>
+</body>
+</html>
